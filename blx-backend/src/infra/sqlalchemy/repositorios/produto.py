@@ -1,6 +1,6 @@
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 from src.schema import schemas
-from ..models import models
+from src.infra.sqlalchemy.models import models
 
 
 class RepositorioProduto():
@@ -11,7 +11,7 @@ class RepositorioProduto():
     def criar(self, produto: schemas.Produto):
         db_produto = models.Produto(
             nome=produto.nome,
-            detalhe=produto.detalhes,
+            detalhes=produto.detalhes,
             preco=produto.preco,
             disponivel=produto.disponivel
         )
@@ -22,6 +22,7 @@ class RepositorioProduto():
 
     def listar(self):
         produtos = self.db.query(models.Produto).all()
+        return produtos
 
     def obter(self):
         pass

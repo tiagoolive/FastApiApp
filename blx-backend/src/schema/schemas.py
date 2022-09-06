@@ -6,9 +6,6 @@ class Usuario(BaseModel):
     id: Optional[str]
     nome: str
     telefone: str
-    meusProdutos: List[Produto]
-    minhas_vendas: List[Pedido]
-    meus_pedidos: List[Pedido]
 
 
 class Produto(BaseModel):
@@ -17,6 +14,9 @@ class Produto(BaseModel):
     detalhes: str
     preco: float
     disponivel: bool = False
+
+    class Config:
+        orm_mode = True
 
 
 class Pedido(BaseModel):

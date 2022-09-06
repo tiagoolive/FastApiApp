@@ -9,3 +9,10 @@ class Produto(Base):
   detalhes = Column(String)
   preco = Column(Float)
   disponivel = Column(Boolean)
+
+class Usuario(Base):
+  __tablename__ = 'usuario'
+
+  id = Column(Integer, primary_key=True, index=True)
+  nome = Column(String)
+  telefone = Column(String)
