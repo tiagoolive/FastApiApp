@@ -19,3 +19,13 @@ async def criar_serie(serie: schemas.Serie, db: Session = Depends(get_db)):
 async def listar_serie(db: Session = Depends(get_db)):
   series = RepositorioSerie(db).listar()
   return series
+
+@app.get('/series/{serie_id}')
+async def obter_serie(serie_id: int, db: Session = Depends(get_db)):
+  serie = RepositorioSerie(db).obter(serie_id)
+  return serie
+
+@app.delete('/series/{serie_id}')
+async def obter_serie(serie_id: int, db: Session = Depends(get_db)):
+  RepositorioSerie(db).remover(serie_id)
+  return {"msg": "Removido com sucesso"}
