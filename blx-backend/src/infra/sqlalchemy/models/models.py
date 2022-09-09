@@ -9,6 +9,7 @@ class Produto(Base):
   detalhes = Column(String)
   preco = Column(Float)
   disponivel = Column(Boolean)
+  tamanhos = Column(String)
 
 class Usuario(Base):
   __tablename__ = 'usuario'

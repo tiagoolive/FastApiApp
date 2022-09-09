@@ -6,7 +6,7 @@ from src.infra.sqlalchemy.repositorios.produto import RepositorioProduto
 from src.infra.sqlalchemy.repositorios.usuario import RepositorioUsuario
 from src.infra.sqlalchemy.config.database import get_db, criar_db
 
-criar_db()
+# criar_db()
 
 app = FastAPI()
 
