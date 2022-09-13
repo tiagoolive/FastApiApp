@@ -13,7 +13,8 @@ class RepositorioProduto():
             nome=produto.nome,
             detalhes=produto.detalhes,
             preco=produto.preco,
-            disponivel=produto.disponivel
+            disponivel=produto.disponivel,
+            usuario_id=produto.usuario_id
         )
         self.db.add(db_produto)
         self.db.commit()
