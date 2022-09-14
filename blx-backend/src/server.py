@@ -11,32 +11,40 @@ app = FastAPI()
 
 # PRODUTOS
 
+
 @app.get('/produtos', response_model=list[Produto])
-def listar_produtos(db: Session = Depends(get_db)):
-    produtos = RepositorioProduto(db).listar()
+def listar_produtos(session: Session = Depends(get_db)):
+    produtos = RepositorioProduto(session).listar()
     return produtos
 
 
 @app.post('/produtos', status_code=status.HTTP_201_CREATED, response_model=ProdutoSimples)
-async def criar_produtos(produto: Produto, db: Session = Depends(get_db)):
-    produto_criado = RepositorioProduto(db).criar(produto)
+async def criar_produtos(produto: Produto, session: Session = Depends(get_db)):
+    produto_criado = RepositorioProduto(session).criar(produto)
     return produto_criado
 
 
 @app.put('/produtos', response_model=Produto)
-async def atualizar_produto(produto: Produto, db: Session = Depends(get_db)):
-    RepositorioProduto(db).editar(produto)
+async def atualizar_produto(produto: Produto, session: Session = Depends(get_db)):
+    RepositorioProduto(session).editar(produto)
     return produto
-    
-# USUARIOS 
+
+
+@app.delete('/produtos/{id}')
+async def remover_produto(id: int, session: Session = Depends(get_db)):
+    RepositorioProduto(session).remover(id)
+    return {'Mensagem': 'Produto Removido'}
+
+# USUARIOS
+
 
 @app.get('/usuarios')
-async def listar_usuarios(db: Session = Depends(get_db), response_model = list[Usuario]):
-    usuarios = RepositorioUsuario(db).listar()
+async def listar_usuarios(session: Session = Depends(get_db), response_model=list[Usuario]):
+    usuarios = RepositorioUsuario(session).listar()
     return usuarios
 
 
 @app.post('/usuarios')
-async def criar_usuarios(usuario: Usuario, db: Session = Depends(get_db), status_code=status.HTTP_201_CREATED, response_model = Usuario):
-    usuario_criado = RepositorioUsuario(db).criar(usuario)
+async def criar_usuarios(usuario: Usuario, session: Session = Depends(get_db), status_code=status.HTTP_201_CREATED, response_model=Usuario):
+    usuario_criado = RepositorioUsuario(session).criar(usuario)
     return usuario_criado
