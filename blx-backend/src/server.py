@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends, status
 from src.schema.schemas import Produto, Usuario, ProdutoSimples
 from sqlalchemy.orm import Session
-from src.infra.sqlalchemy.repositorios.produto import RepositorioProduto
-from src.infra.sqlalchemy.repositorios.usuario import RepositorioUsuario
+from src.infra.sqlalchemy.repositorios.repositorio_produto import RepositorioProduto
+from src.infra.sqlalchemy.repositorios.repositorio_usuario import RepositorioUsuario
 from src.infra.sqlalchemy.config.database import get_db, criar_db
 
 # criar_db()
@@ -21,6 +21,12 @@ def listar_produtos(db: Session = Depends(get_db)):
 async def criar_produtos(produto: Produto, db: Session = Depends(get_db)):
     produto_criado = RepositorioProduto(db).criar(produto)
     return produto_criado
+
+
+@app.put('/produtos', response_model=Produto)
+async def atualizar_produto(produto: Produto, db: Session = Depends(get_db)):
+    RepositorioProduto(db).editar(produto)
+    return produto
     
 # USUARIOS 
 
