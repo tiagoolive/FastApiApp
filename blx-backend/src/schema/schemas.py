@@ -1,14 +1,30 @@
-from optparse import Option
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 
+
+class ProdutoSimples(BaseModel):
+    id: Optional[int] = None
+    nome: str
+    preco: float
+    disponivel: bool
+
+    class Config:
+        orm_mode = True
 
 class Usuario(BaseModel):
     id: Optional[int] = None
     nome: str
     telefone: str
     senha: str
-    # produtos: List[Produto] = []
+    produtos: list[ProdutoSimples] = []
+
+    class config:
+        orm_mode = True
+
+class UsuarioSimples(BaseModel):
+    id: Optional[int] = None
+    nome: str
+    telefone: str
 
     class config:
         orm_mode = True
@@ -21,7 +37,7 @@ class Produto(BaseModel):
     preco: float     
     disponivel: bool = False
     usuario_id: Optional[int]
-    # usuario: Optional[Usuario]
+    # usuario: Optional[UsuarioSimples]
 
     class Config:
         orm_mode = True

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, status
+from fastapi.middleware.cors import CORSMiddleware
 from src.schema.schemas import Produto, Usuario, ProdutoSimples
 from sqlalchemy.orm import Session
 from src.infra.sqlalchemy.repositorios.repositorio_produto import RepositorioProduto
@@ -24,9 +25,10 @@ async def criar_produtos(produto: Produto, session: Session = Depends(get_db)):
     return produto_criado
 
 
-@app.put('/produtos', response_model=Produto)
-async def atualizar_produto(produto: Produto, session: Session = Depends(get_db)):
-    RepositorioProduto(session).editar(produto)
+@app.put('/produtos/{id}', response_model=ProdutoSimples)
+async def atualizar_produto(id: int, produto: Produto, session: Session = Depends(get_db)):
+    RepositorioProduto(session).editar(id, produto)
+    produto.id = id
     return produto
 
 
@@ -44,7 +46,7 @@ async def listar_usuarios(session: Session = Depends(get_db), response_model=lis
     return usuarios
 
 
-@app.post('/usuarios')
-async def criar_usuarios(usuario: Usuario, session: Session = Depends(get_db), status_code=status.HTTP_201_CREATED, response_model=Usuario):
+@app.post('/signup')
+async def signup(usuario: Usuario, session: Session = Depends(get_db), status_code=status.HTTP_201_CREATED, response_model=Usuario):
     usuario_criado = RepositorioUsuario(session).criar(usuario)
     return usuario_criado

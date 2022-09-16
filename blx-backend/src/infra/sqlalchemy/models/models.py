@@ -10,7 +10,6 @@ class Usuario(Base):
     nome = Column(String)
     senha = Column(String)
     telefone = Column(String)
-
     produtos = relationship('Produto', back_populates='usuario')
 
 
@@ -24,5 +23,4 @@ class Produto(Base):
     disponivel = Column(Boolean)
     tamanho = Column(String)
     usuario_id = Column(Integer, ForeignKey('usuario.id', name='fk_usuario'))
-
     usuario = relationship('Usuario', back_populates='produtos')

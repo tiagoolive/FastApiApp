@@ -26,8 +26,8 @@ class RepositorioProduto():
         produtos = self.session.query(models.Produto).all()
         return produtos
 
-    def editar(self, produto: schemas.Produto):
-        stmt = update(models.Produto).where(models.Produto.id == produto.id).values(
+    def editar(self, id: int, produto: schemas.Produto):
+        stmt = update(models.Produto).where(models.Produto.id == id).values(
             nome=produto.nome,
             detalhes=produto.detalhes,
             preco=produto.preco,
