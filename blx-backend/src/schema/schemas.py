@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -42,25 +42,19 @@ class Produto(BaseModel):
     class Config:
         orm_mode = True
 
-class ProdutoSimples(BaseModel):
-    id: Optional[int]
-    nome: str
-    preco: float
-
-    class Config:
-        orm_mode = True
-
 
 class Pedido(BaseModel):
     id: Optional[int]
     quantidade: int
-    usuario_id: Optional[int]
-    produto_id: Optional[int]
-    local_entrega: str
+    local_entrega: Optional[str]
     tipo_entrega: str
     observacao: Optional[str] = 'Sem observações'
+
+    usuario_id: Optional[int]
+    produto_id: Optional[int]
+    
     #usuario: Optional[Usuario]
-    produto: Optional[Produto]
+    produto: Optional[ProdutoSimples]
 
     class Config:
         orm_mode = True
