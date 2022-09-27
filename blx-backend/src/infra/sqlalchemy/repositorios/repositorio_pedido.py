@@ -1,3 +1,4 @@
+from pyexpat import model
 from sqlalchemy import update, delete, select
 from sqlalchemy.orm import Session
 from src.schema import schemas
@@ -6,10 +7,11 @@ from src.infra.sqlalchemy.models import models
 
 class RepositorioPedido():
 
-    def __init__(self, session: Session):
+    def __init__(self, session: Session) -> None:
         self.session = session
+        
 
-    def criar(self, pedido: schemas.Pedido):
+    def criar(self, pedido: schemas.Pedido) -> models.Pedido:
         db_pedido = models.Pedido(
             quantidade = pedido.quantidade,
             local_entrega = pedido.local_entrega,
@@ -27,10 +29,16 @@ class RepositorioPedido():
         pedidos = self.session.query(models.Pedido).all()
         return pedidos
 
-    def buscarPorId(self, id: int):
+    def buscar_por_id(self, id: int) -> models.Pedido:
         stmt = select(models.Pedido).where(models.Pedido.id == id)
         pedido = self.session.execute(stmt).first()
         return pedido
+
+    def listar_meus_pedidos_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
+        pass
+
+    def listar_minhas_vendas_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
+        pass
 
     def editar(self, id: int, pedido: schemas.Pedido):
         stmt = update(models.Pedido).where(models.Pedido.id == id).values(
