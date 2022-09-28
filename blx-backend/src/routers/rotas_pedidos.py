@@ -9,7 +9,7 @@ from src.schema.schemas import Pedido
 router = APIRouter()
 
 
-@router.get('/pedidos', response_model=list[Pedido])
+@router.get('/pedidos/', response_model=list[Pedido])
 async def listar_pedidos(session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(session).listar()
     return pedidos
@@ -17,21 +17,22 @@ async def listar_pedidos(session: Session = Depends(get_db)):
 
 @router.get('/pedidos/{id}')
 async def exibir_pedido(id: int, session: Session = Depends(get_db)):
-    pedido = RepositorioPedido(session).buscar_por_id(id)
-    if not pedido:
+    try:
+        pedido = RepositorioPedido(session).buscar_por_id(id)
+        return pedido
+    except:
         raise HTTPException(
-            status_code=404, detail='Não há um pedido com este ID')
-    return pedido
+            status_code=404, detail=f'Não há um pedido com o id={id}')
 
 
-@router.get('/pedidos/{usuario_id}', response_model=list[Pedido])
+@router.get('/pedidos/{usuario_id}/compras')
 async def listar_pedidos_por_usuario(usuario_id: int, session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(
         session).listar_meus_pedidos_por_usuario_id(usuario_id)
     return pedidos
 
 
-@router.get('/pedidos/{usuario_id}/vendas', response_model=list[Pedido])
+@router.get('/pedidos/{usuario_id}/vendas')
 async def listar_vendas(usuario_id: int, session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(
         session).listar_minhas_vendas_por_usuario_id(usuario_id)

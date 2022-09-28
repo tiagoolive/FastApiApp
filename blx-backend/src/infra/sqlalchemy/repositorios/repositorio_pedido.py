@@ -9,16 +9,15 @@ class RepositorioPedido():
 
     def __init__(self, session: Session) -> None:
         self.session = session
-        
 
     def criar(self, pedido: schemas.Pedido) -> models.Pedido:
         db_pedido = models.Pedido(
-            quantidade = pedido.quantidade,
-            local_entrega = pedido.local_entrega,
-            tipo_entrega = pedido.tipo_entrega,
-            usuario_id = pedido.usuario_id,
-            produto_id = pedido.produto_id,
-            observacao = pedido.observacao
+            quantidade=pedido.quantidade,
+            local_entrega=pedido.local_entrega,
+            tipo_entrega=pedido.tipo_entrega,
+            usuario_id=pedido.usuario_id,
+            produto_id=pedido.produto_id,
+            observacao=pedido.observacao
         )
         self.session.add(db_pedido)
         self.session.commit()
@@ -31,23 +30,29 @@ class RepositorioPedido():
 
     def buscar_por_id(self, id: int) -> models.Pedido:
         stmt = select(models.Pedido).where(models.Pedido.id == id)
-        pedido = self.session.execute(stmt).first()
-        return pedido
+        resultado = self.session.execute(stmt).first()
+        return resultado[0]
 
     def listar_meus_pedidos_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
-        pass
+        stmt = select(models.Pedido).where(
+            models.Pedido.usuario_id == usuario_id)
+        resultado = self.session.execute(stmt).all()
+        return resultado
 
     def listar_minhas_vendas_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
-        pass
+        stmt = select(models.Pedido).join_from(models.Pedido, models.Produto).where(
+            models.Pedido.usuario_id == usuario_id)
+        resultado = self.session.execute(stmt).all()
+        return resultado
 
     def editar(self, id: int, pedido: schemas.Pedido):
         stmt = update(models.Pedido).where(models.Pedido.id == id).values(
-            quantidade = pedido.quantidade,
-            local_entrega = pedido.local_entrega,
-            tipo_entrega = pedido.tipo_entrega,
-            usuario_id = pedido.usuario_id,
-            produto_id = pedido.produto_id,
-            observacao = pedido.observacao
+            quantidade=pedido.quantidade,
+            local_entrega=pedido.local_entrega,
+            tipo_entrega=pedido.tipo_entrega,
+            usuario_id=pedido.usuario_id,
+            produto_id=pedido.produto_id,
+            observacao=pedido.observacao
         )
         self.session.execute(stmt)
         self.session.commit()
