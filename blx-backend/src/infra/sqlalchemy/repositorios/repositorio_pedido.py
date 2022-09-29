@@ -30,19 +30,19 @@ class RepositorioPedido():
 
     def buscar_por_id(self, id: int) -> models.Pedido:
         stmt = select(models.Pedido).where(models.Pedido.id == id)
-        resultado = self.session.execute(stmt).first()
-        return resultado[0]
+        resultado = self.session.execute(stmt).scalars().first()
+        return resultado
 
     def listar_meus_pedidos_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
         stmt = select(models.Pedido).where(
             models.Pedido.usuario_id == usuario_id)
-        resultado = self.session.execute(stmt).all()
+        resultado = self.session.execute(stmt).scalars().all()
         return resultado
 
     def listar_minhas_vendas_por_usuario_id(self, usuario_id: int) -> list[models.Pedido]:
         stmt = select(models.Pedido).join_from(models.Pedido, models.Produto).where(
             models.Pedido.usuario_id == usuario_id)
-        resultado = self.session.execute(stmt).all()
+        resultado = self.session.execute(stmt).scalars().all()
         return resultado
 
     def editar(self, id: int, pedido: schemas.Pedido):

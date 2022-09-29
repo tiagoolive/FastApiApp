@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.routers import rotas_produtos, rotas_usuarios, rotas_pedidos
+from src.routers import rotas_produtos, rotas_auth, rotas_pedidos
 # criar_db()
 
 app = FastAPI()
@@ -18,14 +18,14 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=["*"],
                    )
 
-# PRODUTOS
+# rotas PRODUTOS
 app.include_router(rotas_produtos.router)
 
 
-# USUARIOS
-app.include_router(rotas_usuarios.router)
+# rotas SEGURANÇA: Autenticação e Autorização
+app.include_router(rotas_auth.router, prefix='/auth')
 
 
-# PEDIDOS
+# rotas PEDIDOS
 app.include_router(rotas_pedidos.router)
 
