@@ -1,18 +1,19 @@
+from src.routers.auth_utils import obter_usuario_logado
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.infra.sqlalchemy.repositorios.repositorio_pedido import RepositorioPedido
 from src.infra.sqlalchemy.config.database import get_db
-from src.schema.schemas import Pedido
+from src.schema.schemas import Pedido, Usuario
 
 
 router = APIRouter()
 
 
-@router.get('/pedidos/', response_model=list[Pedido])
-async def listar_pedidos(session: Session = Depends(get_db)):
-    pedidos = RepositorioPedido(session).listar()
-    return pedidos
+# @router.get('/pedidos/', response_model=list[Pedido])
+# async def listar_pedidos(session: Session = Depends(get_db)):
+#     pedidos = RepositorioPedido(session).listar()
+#     return pedidos
 
 
 @router.get('/pedidos/{id}')
@@ -25,10 +26,10 @@ async def exibir_pedido(id: int, session: Session = Depends(get_db)):
             status_code=404, detail=f'Não há um pedido com o id={id}')
 
 
-@router.get('/pedidos/{usuario_id}/compras', response_model=list[Pedido])
-async def listar_pedidos_por_usuario(usuario_id: int, session: Session = Depends(get_db)):
+@router.get('/pedidos/', response_model=list[Pedido])
+async def listar_pedidos_por_usuario(usuario: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(
-        session).listar_meus_pedidos_por_usuario_id(usuario_id)
+        session).listar_meus_pedidos_por_usuario_id(usuario.id)
     return pedidos
 
 
