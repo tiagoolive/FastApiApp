@@ -33,10 +33,10 @@ async def listar_pedidos_por_usuario(usuario: Usuario = Depends(obter_usuario_lo
     return pedidos
 
 
-@router.get('/pedidos/{usuario_id}/vendas', response_model=list[Pedido])
-async def listar_vendas(usuario_id: int, session: Session = Depends(get_db)):
+@router.get('/pedidos/vendas/usuario', response_model=list[Pedido])
+async def listar_vendas(usuario: Usuario = Depends(obter_usuario_logado), session: Session = Depends(get_db)):
     pedidos = RepositorioPedido(
-        session).listar_minhas_vendas_por_usuario_id(usuario_id)
+        session).listar_minhas_vendas_por_usuario_id(usuario.id)
     return pedidos
 
 
